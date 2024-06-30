@@ -1,25 +1,59 @@
 class Solution1 {
 public:
-    int findCenter(vector<vector<int>>& edges) {
-        vector<int>freq(edges.size() + 2, 0);
+    long long maximumImportance(int n, vector<vector<int>>& roads) {
+        ios_base::sync_with_stdio(false);
+        cin.tie(NULL);
+        cout.tie(NULL);
 
-        for(int i = 0; i < edges.size(); ++i) {
-            ++freq[edges[i][0]];
-            ++freq[edges[i][1]];
+        vector<int> adj(n);
+
+        for (int i = 0; i < roads.size(); i++) {
+            adj[roads[i][0]]++;
+            adj[roads[i][1]]++;
         }
 
-        for(int i = 0; i < freq.size(); ++i) 
-            if(freq[i] == edges.size()) return i;
+        priority_queue<pair<int, int>> pq;
+        for (int i = 0; i < adj.size(); ++i) {
+            pq.push({adj[i], i});
+        }
 
-        return 0;
+        vector<int> value(n);
+        long long count = 0;
+
+        while (!pq.empty()) {
+            auto [_, idx] = pq.top();
+            pq.pop();
+
+            value[idx] = n--;
+        }
+
+        for (int i = 0; i < roads.size(); i++) {
+            count += (long long)value[roads[i][0]] + value[roads[i][1]];
+        }
+        return count;
     }
 };
 
-class Solution2 {
+class Solution {
 public:
-    int findCenter(vector<vector<int>>& edges) {
-        if(edges[0][0] == edges[1][0] || edges[0][0] == edges[1][1]) return edges[0][0];
+    long long maximumImportance(int n, vector<vector<int>>& roads) {
+        ios_base::sync_with_stdio(false);
+        cin.tie(NULL);
+        cout.tie(NULL);
 
-        return edges[0][1];
+        vector<int> adj(n);
+
+        for (int i = 0; i < roads.size(); i++) {
+            adj[roads[i][0]]++;
+            adj[roads[i][1]]++;
+        }
+
+        sort(adj.begin(), adj.end());
+        long long count = 0;
+
+        for (int i = 0; i < adj.size(); i++) {
+            count += ((long long)(i + 1) * (adj[i]));
+        }
+        return count;
     }
 };
